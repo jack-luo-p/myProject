@@ -42,7 +42,7 @@ const toggleMode = () => {
 
 const handleLogin = async () => {
   try {
-    await request.post('/api/login', {
+    await request.post('/api/user/login', {
       username: username.value,
       password: password.value,
     })
@@ -76,6 +76,9 @@ const handleReset = () => {
 </script>
 
 <style scoped>
+h2 {
+  color: #208;
+}
 .login-container {
   display: flex;
   justify-content: center;

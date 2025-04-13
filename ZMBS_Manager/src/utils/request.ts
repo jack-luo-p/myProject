@@ -7,7 +7,7 @@ const request = <T = any>(config: AxiosRequestConfig): Promise<AxiosResponse<T>>
   return axios(config)
 }
 const service = axios.create({
-  baseURL: 'https://api.example.com', // 你的接口前缀
+  baseURL: '', // 你的接口前缀
   timeout: 5000,
 })
 
