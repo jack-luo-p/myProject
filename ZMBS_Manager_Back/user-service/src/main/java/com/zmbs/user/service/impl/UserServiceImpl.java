@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zmbs.common.result.Result;
 import com.zmbs.common.result.ResultCode;
+import com.zmbs.common.util.JwtUtils;
 import com.zmbs.common.util.SecurityUtils;
 import com.zmbs.user.dto.LoginDTO;
 import com.zmbs.user.dto.RegisterDTO;
@@ -48,6 +49,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (user == null) {
             return Result.failed("用户不存在，请先注册");
         }
+
+        // 根据用户查找对应的角色
+
 
         // 校验密码
         if (!encryptedPassword.equals(user.getPassword())) {
@@ -136,6 +140,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return null;
         }
         UserVO userVO = new UserVO();
+        userVO.setToken(JwtUtils.generateToken(user.getUsername()));
         BeanUtils.copyProperties(user, userVO);
         return userVO;
     }

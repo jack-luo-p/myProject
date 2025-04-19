@@ -27,8 +27,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import request from '@/utils/request.ts'
+import { userApi } from "@/api";
+import {useRouter} from 'vue-router'
 
+const router = useRouter()
 const username = ref('')
 const password = ref('')
 const confirmPassword = ref('')
@@ -42,12 +44,15 @@ const toggleMode = () => {
 
 const handleLogin = async () => {
   try {
-    await request.post('/api/login', {
-      username: username.value,
-      password: password.value,
-    })
-    alert('登录成功！')
-    // 登录成功后跳转页面...
+    await userApi.login(
+      username.value,
+      password.value,
+    )
+    // 保存token到localStorage
+    localStorage.setItem('token', 'res.token')
+    alert('登录成功')
+    debugger
+    router.push('/')
   } catch (err: any) {
     alert(`登录失败: ${err.response?.data?.message || err.message}`)
   }
@@ -59,11 +64,13 @@ const handleRegister = async () => {
     return
   }
   try {
-    await request.post('/api/register', {
-      username: username.value,
-      password: password.value,
-    })
+    await userApi.register(
+      username.value,
+      password.value,
+      confirmPassword.value
+    )
     alert('注册成功！请登录')
+    // 注册成功后跳转页面...
     isLogin.value = true
   } catch (err: any) {
     alert(`注册失败: ${err.response?.data?.message || err.message}`)
@@ -76,6 +83,9 @@ const handleReset = () => {
 </script>
 
 <style scoped>
+h2 {
+  color: #208;
+}
 .login-container {
   display: flex;
   justify-content: center;

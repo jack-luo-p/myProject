@@ -15,18 +15,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
-            .authorizeRequests()
+                .csrf().disable()
+                .authorizeRequests()
                 // 允许这些路径无需认证
                 .antMatchers("/api/user/login", "/api/user/register", "/api/user/test").permitAll()
                 // 其他请求需要认证
                 .anyRequest().authenticated()
-            .and()
-            .httpBasic();
-        
+                .and()
+                .httpBasic();
+
         return http.build();
     }
-    
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
