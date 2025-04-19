@@ -16,17 +16,18 @@ export const userApi = {
       data: { username, password }
     })
   },
-  
+
   /**
    * 用户注册
    * @param username 用户名
    * @param password 密码
+   * @param confirmPassword 确认密码
    */
-  register: (username: string, password: string) => {
+  register: (username: string, password: string, confirmPassword: string) => {
     return request({
-      url: '/api/register',
+      url: '/api/user/register',
       method: 'post',
-      data: { username, password }
+      data: { username, password ,confirmPassword}
     })
   }
 }
@@ -34,4 +35,4 @@ export const userApi = {
 // 导出所有API
 export default {
   user: userApi
-} 
+}

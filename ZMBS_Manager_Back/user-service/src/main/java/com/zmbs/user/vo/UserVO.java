@@ -61,4 +61,9 @@ public class UserVO implements Serializable {
      */
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
+
+    /**
+     * 用户token信息
+     */
+    private String token;
 } 
