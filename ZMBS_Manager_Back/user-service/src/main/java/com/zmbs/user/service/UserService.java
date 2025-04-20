@@ -6,8 +6,14 @@ import com.zmbs.user.dto.LoginDTO;
 import com.zmbs.user.dto.RegisterDTO;
 import com.zmbs.user.dto.UpdatePasswordDTO;
 import com.zmbs.user.dto.UpdateUserDTO;
+import com.zmbs.user.entity.RoleMenu;
 import com.zmbs.user.entity.User;
+import com.zmbs.user.entity.UserRole;
 import com.zmbs.user.vo.UserVO;
+
+import javax.management.relation.Role;
+import javax.management.relation.RoleInfo;
+import java.util.Map;
 
 /**
  * 用户Service接口
@@ -20,7 +26,7 @@ public interface UserService extends IService<User> {
      * @param loginDTO 登录信息
      * @return 登录结果
      */
-    Result<UserVO> login(LoginDTO loginDTO);
+    Result<Map> login(LoginDTO loginDTO);
 
     /**
      * 用户注册

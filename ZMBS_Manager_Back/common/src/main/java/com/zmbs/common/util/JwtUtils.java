@@ -22,11 +22,11 @@ public class JwtUtils {
     private static final long EXPIRATION = 3600000;
 
     // 生成 token
-    public static String generateToken(String userId,String userName,String userRole) {
+    public static String generateToken(String userId,String userName,String roleId) {
         return Jwts.builder()
                 .setSubject(userId) // userId
                 .claim("username", userName)
-                .claim("role", userRole)
+                .claim("roleId", roleId)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION)) // 1小时有效
                 .signWith(SignatureAlgorithm.HS256, SECRET)

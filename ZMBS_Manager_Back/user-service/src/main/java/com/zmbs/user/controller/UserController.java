@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * 用户控制器
  */
@@ -38,7 +40,7 @@ public class UserController {
      */
     @PostMapping("/login")
     @Operation(summary = "用户登录", description = "用户登录接口，如果用户不存在会提示注册")
-    public Result<UserVO> login(@Validated @RequestBody LoginDTO loginDTO) {
+    public Result<Map> login(@Validated @RequestBody LoginDTO loginDTO) {
         return userService.login(loginDTO);
     }
 

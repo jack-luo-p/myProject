@@ -11,15 +11,20 @@ import com.zmbs.user.dto.RegisterDTO;
 import com.zmbs.user.dto.UpdatePasswordDTO;
 import com.zmbs.user.dto.UpdateUserDTO;
 import com.zmbs.user.entity.User;
+import com.zmbs.user.entity.UserRole;
 import com.zmbs.user.mapper.UserMapper;
+import com.zmbs.user.service.UserRoleService;
 import com.zmbs.user.service.UserService;
 import com.zmbs.user.vo.UserVO;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -28,8 +33,11 @@ import java.util.Objects;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
+    @Autowired
+    private UserRoleService userRoleService;
+
     @Override
-    public Result<UserVO> login(LoginDTO loginDTO) {
+    public Result<Map> login(LoginDTO loginDTO) {
         String username = loginDTO.getUsername();
         String password = loginDTO.getPassword();
 
@@ -50,7 +58,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return Result.failed("用户不存在，请先注册");
         }
 
-        // 根据用户查找对应的角色
+        // 根据用户查找对应的角色 - 关联用户角色表user_role
+        UserRole roleInfo = userRoleService.getUserRoleById(user.getId());
+        if (roleInfo == null) {
+            return Result.failed("用户关联角色信息不存在，请联系管理员");
+        }
 
 
         // 校验密码
@@ -64,8 +76,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         // 登录成功，返回用户信息
-        UserVO userVO = convertToUserVO(user);
-        return Result.success("登录成功", userVO);
+//        UserVO userVO = convertToUserVO(user);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("token", JwtUtils.generateToken(String.valueOf(user.getId()),username,roleInfo.getRoleId()));
+        return Result.success("登录成功", map);
     }
 
     @Override
@@ -140,7 +154,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return null;
         }
         UserVO userVO = new UserVO();
-        userVO.setToken(JwtUtils.generateToken(user.getUsername()));
         BeanUtils.copyProperties(user, userVO);
         return userVO;
     }
